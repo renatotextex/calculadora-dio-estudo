@@ -2,7 +2,7 @@
 import Input from './components/Input';
 import Button from './components/Button';
 
-import { Container, Content, Row } from './styles';
+import { Container, Content, Row, LastRow  } from './styles';
 import { useState } from 'react';
 
 
@@ -17,34 +17,77 @@ const App = () => {
     setOperation('')
   };
 
-  const handleAddNumber = (num) => {
-    setCurrentNumber(prev => `${prev === '0' ? '' : prev}${num}`)
+  const handleAddNumber = (num) => {    
+      setCurrentNumber(prev => `${prev === '0' ? '' : prev}${num}`)    
   }
 
-  const handleSumNumbers = () => {
+  const handleSumNumbers = (resultado) => {
 
     if(firstNumber === '0'){
         setFirstNumber(String(currentNumber));
         setCurrentNumber('0')
         setOperation('+')
-    }else {
-      const sum = Number(firstNumber) + Number(currentNumber);
-      setCurrentNumber(String(sum))
-      setOperation('')
-    }
+      }else {
+        if(resultado === true){
+          const div = parseFloat(firstNumber.replace(',','.')) + parseFloat(currentNumber.replace(',','.'));      
+          setCurrentNumber(div.toString().replace('.',','))        
+        }else{
+          setFirstNumber(String(currentNumber));
+          setCurrentNumber('0')
+        }
+      }
 
   }
 
-  const handleMinusNumbers = () => {
+  const handleMinusNumbers = (resultado) => {
 
     if(firstNumber === '0'){
         setFirstNumber(String(currentNumber));
         setCurrentNumber('0')
         setOperation('-')
+      }else {
+        if(resultado === true){
+          const div = parseFloat(firstNumber.replace(',','.')) - parseFloat(currentNumber.replace(',','.'));      
+          setCurrentNumber(div.toString().replace('.',','))        
+        }else{
+          setFirstNumber(String(currentNumber));
+          setCurrentNumber('0')
+        }
+      }
+
+  }
+  const handleDivideNumbers = (resultado) => {
+
+    if(firstNumber === '0'){
+        setFirstNumber(String(currentNumber));
+        setCurrentNumber('0')
+        setOperation('/')
+      }else {
+        if(resultado === true){
+          const div = parseFloat(firstNumber.replace(',','.')) / parseFloat(currentNumber.replace(',','.'));      
+          setCurrentNumber(div.toString().replace('.',','))        
+        }else{
+          setFirstNumber(String(currentNumber));
+          setCurrentNumber('0')
+        }
+      }
+
+  }
+
+  const handleMultiplyNumbers = (resultado) => {
+
+    if(firstNumber === '0'){
+        setFirstNumber(String(currentNumber));
+        setCurrentNumber('0')
+        setOperation('*')
     }else {
-      const sum = Number(firstNumber) - Number(currentNumber);
-      setCurrentNumber(String(sum))
-      setOperation('')
+      if(resultado === true){
+        const div = parseFloat(firstNumber.replace(',','.')) * parseFloat(currentNumber.replace(',','.'));      
+        setCurrentNumber(div.toString().replace('.',','))        
+      }else{
+        setFirstNumber(String(currentNumber));
+        setCurrentNumber('0')
+      }
     }
 
   }
@@ -54,10 +97,16 @@ const App = () => {
     if(firstNumber !== '0' && operation !== '' && currentNumber !== '0'){
         switch(operation){
           case '+':
-            handleSumNumbers();
+            handleSumNumbers(true);
             break;
           case '-':
-            handleMinusNumbers();
+            handleMinusNumbers(true);
+            break;
+          case '/':
+            handleDivideNumbers(true);
+            break;
+          case '*':
+            handleMultiplyNumbers(true);
             break;
           default: 
             break;
@@ -71,10 +120,10 @@ const App = () => {
       <Content>
         <Input value={currentNumber}/>
         <Row>
-          <Button label="x"/>
-          <Button label="/"/>
+          <Button label="*" onClick={handleMultiplyNumbers}/>
+          <Button label="/" onClick={handleDivideNumbers}/>
           <Button label="c" onClick={handleOnClear}/>
-          <Button label="."/>
+          <Button label="." onClick={() => handleAddNumber(',')}/>
         </Row>
         <Row>
           <Button label="7" onClick={() => handleAddNumber('7')}/>
@@ -88,12 +137,12 @@ const App = () => {
           <Button label="6" onClick={() => handleAddNumber('6')}/>
           <Button label="+" onClick={handleSumNumbers}/>
         </Row>
-        <Row>
+        <LastRow>
           <Button label="1" onClick={() => handleAddNumber('1')}/>
           <Button label="2" onClick={() => handleAddNumber('2')}/>
           <Button label="3" onClick={() => handleAddNumber('3')}/>
           <Button label="=" onClick={handleEquals}/>
-        </Row>
+        </LastRow>
       </Content>
     </Container>
   );
