@@ -106,7 +106,7 @@ const App = () => {
             handleDivideNumbers(true);
             break;
           case '*':
-            handleMultiplyNumbers(true);
+            handleMultiplyNumbers(true); 
             break;
           default: 
             break;
